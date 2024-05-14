@@ -51,13 +51,33 @@ class Conta(ABC):
     def historico(self):
         return self._historico
 
-    @abstractmethod
     def sacar(self, valor):
-        pass
+        saldo = self.saldo
+        excedeu_saldo = valor > saldo
 
-    @abstractmethod
+        if excedeu_saldo:
+            print("\n@@@ Operação falhou! Você não tem saldo suficiente. @@@")
+
+        elif valor > 0:
+            self._saldo -= valor
+            print("\n=== Saque realizado com sucesso! ===")
+            return True
+
+        else:
+            print("\n@@@ Operação falhou! O valor informado é inválido. @@@")
+
+        return False
+
     def depositar(self, valor):
-        pass
+        if valor > 0:
+            self._saldo += valor
+            print("\n=== Depósito realizado com sucesso! ===")
+        else:
+            print("\n@@@ Operação falhou! O valor informado é inválido. @@@")
+            return False
+
+        return True
+
 
 class ContaCorrente(Conta):
     def __init__(self, numero, cliente, limite=500, limite_saques=3):
